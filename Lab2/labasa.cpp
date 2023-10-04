@@ -49,6 +49,8 @@ void test()
 
         int chunkSize = A / el;
 
+        omp_set_num_threads(el);
+
         chrono::high_resolution_clock::time_point start_time = chrono::high_resolution_clock::now();
 
         #pragma omp parallel private(start, end)
