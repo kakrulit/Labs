@@ -41,28 +41,30 @@ void test()
         int A = getRandNum(2000, 3000);
         int B = getRandNum(2000, 3000);
 
+        int start, end;
+
         vector<vector<int>> matrix(A, vector<int>(B, 0));
 
         fillMatrix(matrix, A, B);
 
         int chunkSize = A / el;
 
-        chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
+        chrono::high_resolution_clock::time_point start_time = chrono::high_resolution_clock::now();
 
-        #pragma omp parallel
+        #pragma omp parallel private(start, end)
         {
             #pragma omp for
             for (int i = 0; i < el; i++)
             {
-                int start = i * chunkSize;
-                int end = (i == el - 1) ? A : (i + 1) * chunkSize;
+                start = i * chunkSize;
+                end = (i == el - 1) ? A : (i + 1) * chunkSize;
                 swapOddRows(matrix, start, end);
             }
         }
 
-        chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
+        chrono::high_resolution_clock::time_point end_time = chrono::high_resolution_clock::now();
 
-        chrono::duration<double> sec_diff = end - start;
+        chrono::duration<double> sec_diff = end_time - start_time;
 
         cout << "Time: " << sec_diff.count() << " sec." << endl;
     }
